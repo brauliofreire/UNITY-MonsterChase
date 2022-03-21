@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
     private float moveForce = 10f;
 
     [SerializeField]
-    private float jumpForce = 11f;
+    private float jumpForce = 5f;
 
     private float movementX;
 
@@ -17,8 +17,11 @@ public class Player : MonoBehaviour
     private Animator animator;
     private string WALK_ANIMATION = "Walk";
     private string TAG_GROUND = "Ground";
+    private string TAG_ENEMY = "Enemy";
 
     private bool isGrounded = true;
+    private bool isJumping = false;
+    private float jumpingCounter = 0.4f;
 
     private void Awake()
     {
@@ -37,12 +40,28 @@ public class Player : MonoBehaviour
     {
         PlayMoveKeyboard();
         animatePlayer();
-        playerJump();
+
+        if(Input.GetButtonDown("Jump") && isGrounded)
+        {
+            isJumping = true;
+        }
+        if (isJumping)
+            jumpingCounter -= Time.deltaTime;
+
+        if (Input.GetButtonUp("Jump"))
+        {
+            isJumping = false;
+            jumpingCounter = 0.4f;
+        }
     }
 
     private void FixedUpdate()
     {
-        
+        if (isJumping)
+        {
+            if (jumpingCounter > 0)
+                myBody.velocity = new Vector2(myBody.velocity.x, jumpForce);
+        }
     }
 
     private void PlayMoveKeyboard()
@@ -69,16 +88,7 @@ public class Player : MonoBehaviour
             animator.SetBool(WALK_ANIMATION, false);
         }
 
-    }
-
-    void playerJump()
-    {       
-        if (Input.GetButtonDown("Jump") && isGrounded)
-        {
-            isGrounded = false;
-            myBody.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse);
-        }
-    }
+    }    
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -86,7 +96,29 @@ public class Player : MonoBehaviour
         {
             isGrounded = true; 
         }
+        ////Catched by one enemy
+        //if (collision.gameObject.CompareTag(TAG_ENEMY))
+        //{
+        //    Destroy(gameObject);
+        //}
     }
 
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag(TAG_GROUND))
+        {
+            isGrounded = false;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        //Debug.Log("Player Trigger: " + collision.gameObject.name);
+        ////Catched by one enemy
+        //if (collision.gameObject.CompareTag(TAG_ENEMY))
+        //{
+        //    Destroy(gameObject);
+        //}
+    }
 
 }// class

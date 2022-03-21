@@ -5,7 +5,7 @@ using UnityEngine;
 public class CameraFollow : MonoBehaviour
 {
 
-    private Transform player;
+    private Transform playerTransf;
     private Vector3 tempPos;
 
     [SerializeField]
@@ -13,13 +13,17 @@ public class CameraFollow : MonoBehaviour
 
     void Start()
     {
-        player = GameObject.FindWithTag("Player").transform;
+        var player = GameObject.FindWithTag("Player");
+        if(player)
+            playerTransf = player.transform;
     }
 
     void LateUpdate()
     {
-        tempPos = transform.position;
-        tempPos.x = player.position.x;
+        if (!playerTransf) return;
+
+        tempPos = transform.position;        
+        tempPos.x = playerTransf.position.x;
 
         if (tempPos.x < minX)
             tempPos.x = minX;

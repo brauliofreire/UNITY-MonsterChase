@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Ground
   - Enemy
+  - Hurtbox
   layers:
   - Default
   - TransparentFX
@@ -13,7 +14,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - Enemy
   - 
   - 
   - 
@@ -48,4 +49,10 @@ TagManager:
     locked: 0
   - name: Players
     uniqueID: 2735213075
+    locked: 0
+  - name: Enemies
+    uniqueID: 2233203765
+    locked: 0
+  - name: UI
+    uniqueID: 713045439
     locked: 0

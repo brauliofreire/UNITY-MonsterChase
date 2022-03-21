@@ -6,7 +6,7 @@ public class Monsters : MonoBehaviour
 {
 
     [HideInInspector]
-    public float speed;
+    public float speed = 1;
 
     private Rigidbody2D myBody;
 
@@ -14,12 +14,16 @@ public class Monsters : MonoBehaviour
     void Awake()
     {
         myBody = GetComponent<Rigidbody2D>();
-        speed = 7;
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
         myBody.velocity = new Vector2(speed, myBody.velocity.y);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        //Debug.Log(collision.gameObject.name);
     }
 } //class
